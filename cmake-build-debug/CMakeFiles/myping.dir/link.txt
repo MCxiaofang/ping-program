@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/myping.dir/ping.c.o -o myping 
