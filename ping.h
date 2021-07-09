@@ -48,6 +48,7 @@ char *canonname;
 int ttl;
 long int count;
 double sec;
+struct itimerval tick;
 int quiet_flag;
 int ttl_flag;
 int broadcast_flag;

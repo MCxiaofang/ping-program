@@ -49,7 +49,7 @@ main(int argc, char **argv)
       case 'i':
         set_sec(optarg);
         sec_flag = 1;
-        printf("set second:%f\n", sec);
+        printf("set second:%.5f\n", sec);
         break;
 
       case '?':
@@ -289,7 +289,7 @@ void
 sig_alrm(int signo) {
   (*pr->fsend)();
   if (count_flag) {
-    if (--count) alarm(1);
+    if (--count) alarm(1);setitimer(ITIMER_REAL, &tick, NULL);
   }
   else alarm(1);   /* probably interrupts recvfrom() */
 }
@@ -489,7 +489,7 @@ set_count(char *optarg)
   }
   sscanf(optarg,"%ld",&count);
   if(count <= 0 || count > 9223372036854775807){
-    printf("ping: invalid argument: '%ld': out of range: 1 <= value <= 9223372036854775807\n", count);
+    printf("ping: invalid argument: '%ld': out of range: 0 < value <= 9223372036854775807\n", count);
     exit(0);
   }
 }
@@ -497,5 +497,13 @@ set_count(char *optarg)
 void
 set_sec(char *optarg)
 {
-
+  if(strspn(optarg, "-0123456789.")!=strlen(optarg)){
+    printf("ping: invalid argument: '%s'\n",optarg);
+    exit(0);
+  }
+  sscanf(optarg,"%lf",&sec);
+  if(sec <= 0.00001 || sec > 10000){
+    printf("ping: invalid argument: '%f': out of range: 0.00001 < value <= 10000\n", sec);
+    exit(0);
+  }
 }
